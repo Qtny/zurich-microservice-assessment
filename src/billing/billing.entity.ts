@@ -1,6 +1,8 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity()
+@Entity({
+  name: 'BILLING_RECORDS',
+})
 export class Billing {
   @PrimaryGeneratedColumn()
   id: number;
@@ -15,7 +17,7 @@ export class Billing {
   lastName: string;
 
   @Column()
-  photoUrl: string;
+  photo: string;
 
   @Column()
   productId: number;
@@ -23,6 +25,8 @@ export class Billing {
   @Column()
   location: string;
 
-  @Column()
-  premiumPaid: string;
+  @Column({
+    type: 'decimal',
+  })
+  premiumPaid: number;
 }

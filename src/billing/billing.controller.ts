@@ -1,5 +1,6 @@
-import { Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { BillingService } from './billing.service';
+import { BillingDTO, billingDtoToBilling } from './billing.dto';
 
 @Controller('billing')
 export class BillingController {
@@ -11,7 +12,11 @@ export class BillingController {
   }
 
   @Post()
-  createBilling() {
-    return this.billingService.create();
+  createBilling(@Body() body: BillingDTO) {
+    // map to billing entity
+    const billing = billingDtoToBilling(body);
+
+    // create
+    return this.billingService.create(billing);
   }
 }
