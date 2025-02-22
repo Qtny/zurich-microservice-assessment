@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Post,
+  Put,
+  Query,
+} from '@nestjs/common';
 import { BillingService } from './billing.service';
 import { BillingDTO, billingDtoToBilling } from './billing.dto';
 
@@ -22,4 +30,10 @@ export class BillingController {
     // create
     return this.billingService.create(billing);
   }
+
+  @Put()
+  updateBilling() {}
+
+  @Delete()
+  deleteBilling() {}
 }
