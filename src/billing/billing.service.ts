@@ -26,8 +26,8 @@ export class BillingService {
     });
   }
 
-  create(billing: Omit<Billing, 'id'>) {
-    return this.billingRepository.save(billing);
+  async create(billing: Omit<Billing, 'id'>) {
+    return await this.billingRepository.save(billing);
   }
 
   async seed() {
