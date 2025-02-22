@@ -1,3 +1,4 @@
+import { HttpStatus } from '@nestjs/common';
 import { Response } from 'express';
 
 export type ApiResponse<T> = {
@@ -5,9 +6,9 @@ export type ApiResponse<T> = {
   data: T;
 };
 
-export function SuccessfulResponse<T>(
+export function ApiResponse<T>(
   res: Response,
-  status: number,
+  status: HttpStatus,
   message: string,
   data: T,
 ) {

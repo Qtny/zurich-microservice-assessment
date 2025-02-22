@@ -20,7 +20,7 @@ import {
   BillingDTOParam,
 } from './billing.dto';
 import { Response } from 'express';
-import { SuccessfulResponse } from 'src/utils/apiWrapper';
+import { ApiResponse } from 'src/utils/apiWrapper';
 
 @Controller('billing')
 export class BillingController {
@@ -33,9 +33,9 @@ export class BillingController {
     productCode?: number,
     @Query('location') location?: string,
   ) {
-    console.log('start');
+    throw new Error('LMAE');
     const billings = await this.billingService.fetchAll(productCode, location);
-    return SuccessfulResponse(
+    return ApiResponse(
       res,
       HttpStatus.OK,
       'Successfully fetched all billings',
@@ -51,7 +51,7 @@ export class BillingController {
     // create
     await this.billingService.create(billing);
 
-    return SuccessfulResponse(
+    return ApiResponse(
       res,
       HttpStatus.CREATED,
       'Successfully created billing',
@@ -85,7 +85,7 @@ export class BillingController {
       body.premiumPaid,
     );
 
-    return SuccessfulResponse(
+    return ApiResponse(
       res,
       HttpStatus.NO_CONTENT,
       'Successfully updated all billings',
@@ -114,7 +114,7 @@ export class BillingController {
     // delete all billings with productCode
     await this.billingService.deleteByProductCode(productCode);
 
-    return SuccessfulResponse(
+    return ApiResponse(
       res,
       HttpStatus.NO_CONTENT,
       'Successfully updated all billings',
