@@ -30,7 +30,11 @@ export class BillingService {
     return await this.billingRepository.save(billing);
   }
 
-  async updateAll(productId: number, location: string, premiumPaid: number) {
+  async updateByProductCode(
+    productId: number,
+    location: string,
+    premiumPaid: number,
+  ) {
     return await this.billingRepository.update(
       {
         productId,
@@ -40,6 +44,12 @@ export class BillingService {
         premiumPaid,
       },
     );
+  }
+
+  async deleteByProductCode(productId: number) {
+    return await this.billingRepository.delete({
+      productId,
+    });
   }
 
   async seed() {

@@ -27,7 +27,7 @@ export class PutBillingDTOBody {
   premiumPaid: number;
 }
 
-export class PutBillingDTOParam {
+export class BillingDTOParam {
   @IsNotEmpty()
   @IsString()
   productCode: string;

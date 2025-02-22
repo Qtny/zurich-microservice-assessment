@@ -17,7 +17,7 @@ import {
   BillingDTO,
   CreateBillingDTO,
   PutBillingDTOBody,
-  PutBillingDTOParam,
+  BillingDTOParam,
 } from './billing.dto';
 import { Response } from 'express';
 import { SuccessfulResponse } from 'src/utils/apiWrapper';
@@ -62,7 +62,7 @@ export class BillingController {
   @Put(':productCode')
   async updateBilling(
     @Param()
-    putBillingParams: PutBillingDTOParam,
+    putBillingParams: BillingDTOParam,
     @Body() body: PutBillingDTOBody,
     @Res() res: Response,
   ) {
@@ -79,7 +79,7 @@ export class BillingController {
     }
 
     // update all billings
-    await this.billingService.updateAll(
+    await this.billingService.updateByProductCode(
       productCode,
       body.location,
       body.premiumPaid,
@@ -93,12 +93,27 @@ export class BillingController {
     );
   }
 
-  @Delete()
-  deleteBilling(
-    @Param('productCode', new ParseIntPipe({ optional: true }))
-    productCode: string,
+  @Delete(':productCode')
+  async deleteBilling(
+    @Param()
+    deleteBillingParams: BillingDTOParam,
     @Res() res: Response,
   ) {
+    // check if its an integer
+    const productCode = parseInt(deleteBillingParams.productCode);
+    if (!Number.isInteger(productCode)) {
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_REQUEST,
+          error: 'productCode must be a number',
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    // delete all billings with productCode
+    await this.billingService.deleteByProductCode(productCode);
+
     return SuccessfulResponse(
       res,
       HttpStatus.NO_CONTENT,
