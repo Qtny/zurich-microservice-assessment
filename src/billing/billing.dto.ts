@@ -3,7 +3,7 @@ import { ADMIN } from 'src/user/admin.mock';
 import { Billing } from './billing.entity';
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
-export class BillingDTO {
+export class CreateBillingDTO {
   @IsNotEmpty()
   @IsNumber()
   productCode: number;
@@ -17,22 +17,40 @@ export class BillingDTO {
   premiumPaid: number;
 }
 
+export class PutBillingDTOBody {
+  @IsNotEmpty()
+  @IsString()
+  location: string;
+
+  @IsNotEmpty()
+  @IsNumber()
+  premiumPaid: number;
+}
+
+export class PutBillingDTOParam {
+  @IsNotEmpty()
+  @IsString()
+  productCode: string;
+}
+
 export type FetchAllOptions = {
   productId?: number;
   location?: string;
 };
 
-export function billingDtoToBilling(billingDto: BillingDTO) {
-  const mockUser = ADMIN;
-  const billingEntity: Omit<Billing, 'id'> = {
-    email: mockUser.email,
-    firstName: mockUser.firstName,
-    lastName: mockUser.lastName,
-    photo: mockUser.photo,
-    productId: billingDto.productCode,
-    location: billingDto.location,
-    premiumPaid: billingDto.premiumPaid,
-  };
+export class BillingDTO {
+  public static fromCreateDto(billingDto: CreateBillingDTO) {
+    const mockUser = ADMIN;
+    const billingEntity: Omit<Billing, 'id'> = {
+      email: mockUser.email,
+      firstName: mockUser.firstName,
+      lastName: mockUser.lastName,
+      photo: mockUser.photo,
+      productId: billingDto.productCode,
+      location: billingDto.location,
+      premiumPaid: billingDto.premiumPaid,
+    };
 
-  return billingEntity;
+    return billingEntity;
+  }
 }

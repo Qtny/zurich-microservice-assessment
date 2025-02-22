@@ -30,6 +30,18 @@ export class BillingService {
     return await this.billingRepository.save(billing);
   }
 
+  async updateAll(productId: number, location: string, premiumPaid: number) {
+    return await this.billingRepository.update(
+      {
+        productId,
+      },
+      {
+        location,
+        premiumPaid,
+      },
+    );
+  }
+
   async seed() {
     const data = await this.fetchAll();
     if (data.length > 0) {

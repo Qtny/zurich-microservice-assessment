@@ -3,7 +3,9 @@ import {
   Controller,
   Delete,
   Get,
+  HttpException,
   HttpStatus,
+  Param,
   ParseIntPipe,
   Post,
   Put,
@@ -11,7 +13,12 @@ import {
   Res,
 } from '@nestjs/common';
 import { BillingService } from './billing.service';
-import { BillingDTO, billingDtoToBilling } from './billing.dto';
+import {
+  BillingDTO,
+  CreateBillingDTO,
+  PutBillingDTOBody,
+  PutBillingDTOParam,
+} from './billing.dto';
 import { Response } from 'express';
 import { SuccessfulResponse } from 'src/utils/apiWrapper';
 
@@ -37,9 +44,9 @@ export class BillingController {
   }
 
   @Post()
-  async createBilling(@Body() body: BillingDTO, @Res() res: Response) {
+  async createBilling(@Body() body: CreateBillingDTO, @Res() res: Response) {
     // map to billing entity
-    const billing = billingDtoToBilling(body);
+    const billing = BillingDTO.fromCreateDto(body);
 
     // create
     await this.billingService.create(billing);
@@ -52,9 +59,51 @@ export class BillingController {
     );
   }
 
-  @Put()
-  updateBilling() {}
+  @Put(':productCode')
+  async updateBilling(
+    @Param()
+    putBillingParams: PutBillingDTOParam,
+    @Body() body: PutBillingDTOBody,
+    @Res() res: Response,
+  ) {
+    // check if its an integer
+    const productCode = parseInt(putBillingParams.productCode);
+    if (!Number.isInteger(productCode)) {
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_REQUEST,
+          error: 'productCode must be a number',
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    // update all billings
+    await this.billingService.updateAll(
+      productCode,
+      body.location,
+      body.premiumPaid,
+    );
+
+    return SuccessfulResponse(
+      res,
+      HttpStatus.NO_CONTENT,
+      'Successfully updated all billings',
+      null,
+    );
+  }
 
   @Delete()
-  deleteBilling() {}
+  deleteBilling(
+    @Param('productCode', new ParseIntPipe({ optional: true }))
+    productCode: string,
+    @Res() res: Response,
+  ) {
+    return SuccessfulResponse(
+      res,
+      HttpStatus.NO_CONTENT,
+      'Successfully updated all billings',
+      null,
+    );
+  }
 }
