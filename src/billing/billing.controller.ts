@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { BillingService } from './billing.service';
 import { BillingDTO, billingDtoToBilling } from './billing.dto';
 
@@ -7,8 +7,11 @@ export class BillingController {
   constructor(private billingService: BillingService) {}
 
   @Get()
-  getAllBillings() {
-    return this.billingService.fetchAll();
+  getAllBillings(
+    @Query('productCode') productCode?: number,
+    @Query('location') location?: string,
+  ) {
+    return this.billingService.fetchAll(productCode, location);
   }
 
   @Post()

@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Billing } from './billing.entity';
+import { FetchAllOptions } from './billing.dto';
 
 @Injectable()
 export class BillingService {
@@ -10,8 +11,19 @@ export class BillingService {
     private billingRepository: Repository<Billing>,
   ) {}
 
-  async fetchAll() {
-    return await this.billingRepository.find();
+  async fetchAll(productCode?: number, location?: string) {
+    const options: FetchAllOptions = {};
+    if (productCode) {
+      options.productId = productCode;
+    }
+
+    if (location) {
+      options.location = location;
+    }
+
+    return await this.billingRepository.find({
+      where: options,
+    });
   }
 
   create(billing: Billing) {

@@ -6,6 +6,11 @@ export type BillingDTO = {
   premiumPaid: number;
 };
 
+export type FetchAllOptions = {
+  productId?: number;
+  location?: string;
+};
+
 export function billingDtoToBilling(billingDto: BillingDTO) {
   const billingEntity: Billing = {
     id: 0,
