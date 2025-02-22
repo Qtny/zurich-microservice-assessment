@@ -2,11 +2,9 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
 import { BillingModule } from './billing/billing.module';
-import { AuthService } from './auth/auth.service';
 import { AuthModule } from './auth/auth.module';
-import { BillingController } from './billing/billing.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { BillingService } from './billing/billing.service';
+import { Billing } from './billing/billing.entity';
 
 @Module({
   imports: [
@@ -25,12 +23,11 @@ import { BillingService } from './billing/billing.service';
         username: configService.get<string>('POSTGRES_USERNAME'),
         password: configService.get<string>('POSTGRES_PASSWORD'),
         database: configService.get<string>('POSTGRES_DATABASE'),
+        entities: [Billing],
         autoLoadEntities: true,
         synchronize: true, // Turn off in production
       }),
     }),
   ],
-  providers: [BillingService, AuthService],
-  controllers: [BillingController],
 })
 export class AppModule {}
