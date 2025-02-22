@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  ParseIntPipe,
   Post,
   Put,
   Query,
@@ -16,7 +17,7 @@ export class BillingController {
 
   @Get()
   getAllBillings(
-    @Query('productCode') productCode?: number,
+    @Query('productCode', ParseIntPipe) productCode?: number,
     @Query('location') location?: string,
   ) {
     return this.billingService.fetchAll(productCode, location);

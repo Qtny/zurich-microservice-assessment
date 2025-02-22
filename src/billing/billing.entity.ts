@@ -25,8 +25,6 @@ export class Billing {
   @Column()
   location: string;
 
-  @Column({
-    type: 'decimal',
-  })
+  @Column('decimal')
   premiumPaid: number;
 }

@@ -1,10 +1,21 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+import { ADMIN } from 'src/user/admin.mock';
 import { Billing } from './billing.entity';
+import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
-export type BillingDTO = {
+export class BillingDTO {
+  @IsNotEmpty()
+  @IsNumber()
   productCode: number;
+
+  @IsNotEmpty()
+  @IsString()
   location: string;
+
+  @IsNotEmpty()
+  @IsNumber()
   premiumPaid: number;
-};
+}
 
 export type FetchAllOptions = {
   productId?: number;
@@ -12,15 +23,16 @@ export type FetchAllOptions = {
 };
 
 export function billingDtoToBilling(billingDto: BillingDTO) {
-  const billingEntity: Billing = {
-    id: 0,
-    email: '',
-    firstName: '',
-    lastName: '',
-    photo: '',
-    productId: 0,
-    location: '',
-    premiumPaid: 0,
+  const mockUser = ADMIN;
+  const billingEntity: Omit<Billing, 'id'> = {
+    email: mockUser.email,
+    firstName: mockUser.firstName,
+    lastName: mockUser.lastName,
+    photo: mockUser.photo,
+    productId: billingDto.productCode,
+    location: billingDto.location,
+    premiumPaid: billingDto.premiumPaid,
   };
+
   return billingEntity;
 }

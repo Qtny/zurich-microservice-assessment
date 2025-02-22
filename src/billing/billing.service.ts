@@ -26,7 +26,7 @@ export class BillingService {
     });
   }
 
-  create(billing: Billing) {
+  create(billing: Omit<Billing, 'id'>) {
     return this.billingRepository.save(billing);
   }
 
