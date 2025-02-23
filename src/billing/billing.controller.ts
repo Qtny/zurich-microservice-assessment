@@ -11,6 +11,7 @@ import {
   Put,
   Query,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 import { BillingService } from './billing.service';
 import {
@@ -21,6 +22,7 @@ import {
 } from './billing.dto';
 import { Response } from 'express';
 import { ApiResponse } from 'src/utils/apiWrapper';
+import { JwtAuthGuard } from 'src/auth/jwt.guard';
 
 @Controller('billing')
 export class BillingController {
@@ -33,7 +35,6 @@ export class BillingController {
     productCode?: number,
     @Query('location') location?: string,
   ) {
-    throw new Error('LMAE');
     const billings = await this.billingService.fetchAll(productCode, location);
     return ApiResponse(
       res,
@@ -44,6 +45,7 @@ export class BillingController {
   }
 
   @Post()
+  @UseGuards(JwtAuthGuard)
   async createBilling(@Body() body: CreateBillingDTO, @Res() res: Response) {
     // map to billing entity
     const billing = BillingDTO.fromCreateDto(body);
@@ -60,6 +62,7 @@ export class BillingController {
   }
 
   @Put(':productCode')
+  @UseGuards(JwtAuthGuard)
   async updateBilling(
     @Param()
     putBillingParams: BillingDTOParam,
@@ -94,6 +97,7 @@ export class BillingController {
   }
 
   @Delete(':productCode')
+  @UseGuards(JwtAuthGuard)
   async deleteBilling(
     @Param()
     deleteBillingParams: BillingDTOParam,
