@@ -22,13 +22,16 @@ import {
 } from './billing.dto';
 import { Response } from 'express';
 import { ApiResponse } from 'src/utils/apiWrapper';
-import { JwtAuthGuard } from 'src/auth/jwt.guard';
+import { JwtAuthGuard } from 'src/auth/jwt';
+import { ApiParam, ApiQuery } from '@nestjs/swagger';
 
 @Controller('billing')
 export class BillingController {
   constructor(private billingService: BillingService) {}
 
   @Get()
+  @ApiQuery({ name: 'productCode', required: false, type: 'number' })
+  @ApiQuery({ name: 'location', required: false, type: 'string' })
   async getAllBillings(
     @Res() res: Response,
     @Query('productCode', new ParseIntPipe({ optional: true }))
@@ -62,6 +65,7 @@ export class BillingController {
   }
 
   @Put(':productCode')
+  @ApiParam({ name: 'productCode', type: 'number' })
   @UseGuards(JwtAuthGuard)
   async updateBilling(
     @Param()
@@ -97,6 +101,7 @@ export class BillingController {
   }
 
   @Delete(':productCode')
+  @ApiParam({ name: 'productCode', type: 'number' })
   @UseGuards(JwtAuthGuard)
   async deleteBilling(
     @Param()

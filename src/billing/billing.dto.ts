@@ -2,26 +2,32 @@
 import { ADMIN } from 'src/user/admin.mock';
 import { Billing } from './billing.entity';
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateBillingDTO {
+  @ApiProperty()
   @IsNotEmpty()
   @IsNumber()
   productCode: number;
 
+  @ApiProperty()
   @IsNotEmpty()
   @IsString()
   location: string;
 
+  @ApiProperty()
   @IsNotEmpty()
   @IsNumber()
   premiumPaid: number;
 }
 
 export class PutBillingDTOBody {
+  @ApiProperty()
   @IsNotEmpty()
   @IsString()
   location: string;
 
+  @ApiProperty()
   @IsNotEmpty()
   @IsNumber()
   premiumPaid: number;

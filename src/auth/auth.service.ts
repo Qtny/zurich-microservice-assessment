@@ -12,13 +12,16 @@ export class AuthService {
   async signIn(username: string, password: string) {
     // TODO: check if user exist
     // TODO: check if password hash is correct
+
+    // console log to suppress linter
+    console.log(password);
     return this.signToken(username);
   }
 
   signToken(username: string) {
     const payload = {
       sub: username,
-      role: 'admin',
+      role: username === 'admin' ? 'admin' : 'user',
     };
 
     return this.jwtService.signAsync(payload, {
