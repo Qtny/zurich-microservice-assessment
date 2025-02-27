@@ -32,18 +32,39 @@ export class BillingController {
   @Get()
   @ApiQuery({ name: 'productCode', required: false, type: 'number' })
   @ApiQuery({ name: 'location', required: false, type: 'string' })
+  @ApiQuery({ name: 'page', required: false, type: 'number' })
   async getAllBillings(
     @Res() res: Response,
     @Query('productCode', new ParseIntPipe({ optional: true }))
     productCode?: number,
+    @Query('page', new ParseIntPipe({ optional: true }))
+    page?: number,
     @Query('location') location?: string,
   ) {
     const billings = await this.billingService.fetchAll(productCode, location);
+    const PAGE_SIZE = 5;
+    const PAGE = page ? page : 1;
+
+    const filteredBillings = billings.filter(
+      (user) => user.firstName[0] === 'G' || user.lastName[0] === 'W',
+    );
+
+    console.log(filteredBillings);
+    const totalPages = Math.ceil(filteredBillings.length / PAGE_SIZE);
+    const slicedBillings = filteredBillings.slice(
+      (PAGE - 1) * PAGE_SIZE,
+      PAGE * PAGE_SIZE,
+    );
+
     return ApiResponse(
       res,
       HttpStatus.OK,
       'Successfully fetched all billings',
-      billings,
+      {
+        billings: slicedBillings,
+        totalPages,
+        totalCount: filteredBillings.length,
+      },
     );
   }
 
