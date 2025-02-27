@@ -17,7 +17,7 @@ npm install
 
 Then run this command to start the project.
 ```bash
-npm run dev
+npm run start
 ```
 
 For production deployment, you can run this command to build the image via docker compose.
